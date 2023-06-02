@@ -55,6 +55,4 @@ This is a CMS-style blog site that allows users to create an account, log in, an
 ![Dashboard](/path/to/dashboard.png)
 ![Blog Post](/path/to/blogpost.png)
 
-## Live Demo
 
-A live demo of the CMS-style blog site can be found at [example.com](https://
