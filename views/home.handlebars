@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Blog Site - Home</title>
+</head>
+<body>
+  <h1>Welcome to the Blog Site</h1>
+  <h2>Latest Blog Posts</h2>
+  {{#each posts}}
+    <h3>{{this.title}}</h3>
+    <p>{{this.content}}</p>
+    <p>By {{this.author}}, created on {{this.timestamp}}</p>
+  {{/each}}
+</body>
+</html>
