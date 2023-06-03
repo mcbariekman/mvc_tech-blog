@@ -1,10 +1,10 @@
 const express = require('express');
-const sequelize = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 
 const app = express();
 
 // Create the database connection
-const db = new sequelize('techblog', 'root', '120399', {
+const db = new Sequelize('techblog', 'root', '120399', {
   host: 'localhost',
   dialect: 'mysql',
 });
@@ -12,11 +12,11 @@ const db = new sequelize('techblog', 'root', '120399', {
 // Define the models
 const User = db.define('User', {
   username: {
-    type: sequelize.STRING,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   password: {
-    type: sequelize.STRING,
+    type: DataTypes.STRING,
     allowNull: false,
   },
 });
