@@ -1,32 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Blog</title>
+    <meta charset="UTF-8">
+    <title>Blog Site</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <!-- Additional CSS files if needed -->
 </head>
 <body>
-  <nav>
-    <ul>
-      <li><a href="/">Home</a></li>
-      {{#if isAuthenticated}}
-        <li><a href="/logout">Logout</a></li>
-      {{else}}
-        <li><a href="/signup">Sign Up</a></li>
-        <li><a href="/login">Login</a></li>
-      {{/if}}
-    </ul>
-  </nav>
+    {{> partials/navbar}}
 
-  <div class="content">
-    {{{ bodyContent }}}
-  </div>
-  
-  <!-- Include signup partial -->
-  {{> signup}}
+    {{{body}}}
 
-  <!-- Include login partial -->
-  {{> login}}
-  
-  <!-- Include single post form -->
-  {{> single-post-form}}
+    <script src="/public/js/script.js"></script>
 </body>
 </html>

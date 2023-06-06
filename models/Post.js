@@ -1,44 +1,18 @@
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/connection');
+const Post = require('../models/Post');
 
-class Post extends Model {}
+async function createPost(req, res) {
+  try {
+    const { title, content, userId } = req.body;
 
-Post.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    content: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'user',
-        key: 'id',
-      },
-    },
-  },
-  {
-    sequelize,
-    timestamps: false,
-    freezeTableName: true,
-    underscored: true,
-    modelName: 'post',
+    // Validate user input, perform any necessary checks
+
+    // Create a new post using the Post model
+    const newPost = await Post.create({ title, content, userId });
+
+    // Handle success response
+    return res.status(201).json({ message: 'Post created successfully', post: newPost });
+  } catch (error) {
+    // Handle error response
+    return res.status(500).json({ message: 'Failed to create post', error: error.message });
   }
-);
-
-module.exports = Post;
+}
