@@ -1,8 +1,6 @@
 const express = require('express');
 const app = express();
 
-// Other middleware and configurations...
-
 // Homepage route
 app.get('/', (req, res) => {
   // Render the main.handlebars template with the appropriate data
