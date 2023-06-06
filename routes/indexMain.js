@@ -1,147 +1,98 @@
-// Import necessary modules and dependencies
 const express = require('express');
-const { User, BlogPost, Comment } = require('../models');
-
-// Create an instance of Express application
 const app = express();
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Import the API routes
-const apiRoutes = require('./apiRoutes');
-
-// Mount the API routes with a base path
-app.use('/api', apiRoutes);
+// Other middleware and configurations...
 
 // Homepage route
-app.get('/', async (req, res) => {
-  try {
-    // Retrieve existing blog posts from the database
-    const blogPosts = await BlogPost.findAll();
-    res.render('homepage', { blogPosts });
-  } catch (error) {
-    res.status(500).send('An error occurred');
-  }
-});
-
-// Signup route
-app.post('/signup', async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const user = await User.create({ username, password });
-    req.session.user = user;
-    res.redirect('/');
-  } catch (error) {
-    res.status(500).send('An error occurred');
-  }
-});
-
-// Login route
-app.post('/login', async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ where: { username } });
-    if (user && user.password === password) {
-      req.session.user = user;
-      res.redirect('/');
-    } else {
-      res.status(401).send('Invalid credentials');
-    }
-  } catch (error) {
-    res.status(500).send('An error occurred');
-  }
-});
-
-// Logout route
-app.post('/logout', (req, res) => {
-  req.session.user = null;
-  res.redirect('/');
-});
-
-// Blog post route
-app.get('/blog/:postId', async (req, res) => {
-  try {
-    const postId = req.params.postId;
-    const blogPost = await BlogPost.findOne({ where: { id: postId } });
-    const comments = await Comment.findAll({ where: { postId } });
-    res.render('blogPost', { blogPost, comments });
-  } catch (error) {
-    res.status(500).send('An error occurred');
-  }
-});
-
-// Add comment route
-app.post('/blog/:postId/comment', async (req, res) => {
-  try {
-    const postId = req.params.postId;
-    const { username, content } = req.body;
-    const comment = await Comment.create({ postId, username, content });
-    res.redirect(`/blog/${postId}`);
-  } catch (error) {
-    res.status(500).send('An error occurred');
-  }
+app.get('/', (req, res) => {
+  // Render the main.handlebars template with the appropriate data
+  res.render('main', { isAuthenticated: req.isAuthenticated });
 });
 
 // Dashboard route
-app.get('/dashboard', async (req, res) => {
-  try {
-    const userId = req.session.user.id;
-    const userBlogPosts = await BlogPost.findAll({ where: { userId } });
-    res.render('dashboard', { userBlogPosts });
-  } catch (error) {
-    res.status(500).send('An error occurred');
-  }
+app.get('/dashboard', (req, res) => {
+  // Render the dashboard.handlebars template with the appropriate data
+  res.render('dashboard', { isAuthenticated: req.isAuthenticated });
 });
 
-// Create blog post route
-app.get('/dashboard/new', (req, res) => {
-  res.render('createBlogPost');
+// Signup route (GET)
+app.get('/signup', (req, res) => {
+  // Render the signup.handlebars template
+  res.render('signup');
 });
 
-app.post('/dashboard/new', async (req, res) => {
-  try {
-    const { title, content } = req.body;
-    const userId = req.session.user.id;
-    const blogPost = await BlogPost.create({ title, content, userId });
-    res.redirect('/dashboard');
-  } catch (error) {
-    res.status(500).send('An error occurred');
-  }
+// Signup route (POST)
+app.post('/signup', (req, res) => {
+  // Process the signup form submission and save the user credentials
+  // Redirect to the homepage or dashboard after successful signup
 });
 
-// Update and delete blog post routes
-app.get('/dashboard/edit/:postId', async (req, res) => {
-  try {
-    const postId = req.params.postId;
-    const blogPost = await BlogPost.findOne({ where: { id: postId } });
-    res.render('editBlogPost', { blogPost });
-  } catch (error) {
-    res.status(500).send('An error occurred');
-  }
+// Login route (GET)
+app.get('/login', (req, res) => {
+  // Render the login.handlebars template
+  res.render('login');
 });
 
-app.post('/dashboard/edit/:postId', async (req, res) => {
-  try {
-    const postId = req.params.postId;
-    const { title, content } = req.body;
-    await BlogPost.update({ title, content }, { where: { id: postId } });
-    res.redirect('/dashboard');
-  } catch (error) {
-    res.status(500).send('An error occurred');
-  }
+// Login route (POST)
+app.post('/login', (req, res) => {
+  // Process the login form submission and authenticate the user
+  // Redirect to the homepage or dashboard after successful login
 });
 
-app.post('/dashboard/delete/:postId', async (req, res) => {
-  try {
-    const postId = req.params.postId;
-    await BlogPost.destroy({ where: { id: postId } });
-    res.redirect('/dashboard');
-  } catch (error) {
-    res.status(500).send('An error occurred');
-  }
+// Logout route
+app.get('/logout', (req, res) => {
+  // Perform logout logic, e.g., clearing session data
+  // Redirect to the homepage after successful logout
 });
+
+// Posts route (GET)
+app.get('/posts/:postId', (req, res) => {
+  // Retrieve the specific blog post by ID
+  // Render the blog post view with the retrieved data
+});
+
+// Posts route (POST)
+app.post('/posts', (req, res) => {
+  // Process the form submission and create a new blog post
+  // Redirect to the dashboard after successful post creation
+});
+
+// Comments route (POST)
+app.post('/posts/:postId/comments', (req, res) => {
+  // Process the form submission and add a new comment to the blog post
+  // Update the blog post and redirect back to the blog post view
+});
+
+// Posts route (PUT)
+app.put('/posts/:postId', (req, res) => {
+  // Process the form submission and update the specific blog post by ID
+  // Redirect to the dashboard after successful post update
+});
+
+// Posts route (DELETE)
+app.delete('/posts/:postId', (req, res) => {
+  // Delete the specific blog post by ID
+  // Redirect to the dashboard after successful post deletion
+});
+
+// Middleware for checking if the user is authenticated
+function isAuthenticated(req, res, next) {
+  // Implement your authentication logic here
+  // Set the isAuthenticated property on the request object based on the user's authentication status
+  // Call the next middleware or route handler
+}
+
+// Middleware for handling idle session timeout
+function sessionTimeout(req, res, next) {
+  // Implement your idle session timeout logic here
+  // Check if the user is idle for a set time and redirect to login if necessary
+}
+
+// Apply the authentication middleware to relevant routes
+app.use(['/dashboard', '/posts', '/posts/:postId', '/logout'], isAuthenticated);
+
+// Apply the session timeout middleware to relevant routes
+app.use(['/posts/:postId'], sessionTimeout);
 
 // Start the server
 app.listen(3000, () => {
