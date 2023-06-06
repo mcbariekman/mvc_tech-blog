@@ -1,10 +1,22 @@
 // Import necessary modules and dependencies
 const express = require('express');
-const router = express.Router();
 const { User, BlogPost, Comment } = require('../models');
 
+// Create an instance of Express application
+const app = express();
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Import the API routes
+const apiRoutes = require('./apiRoutes');
+
+// Mount the API routes with a base path
+app.use('/api', apiRoutes);
+
 // Homepage route
-router.get('/', async (req, res) => {
+app.get('/', async (req, res) => {
   try {
     // Retrieve existing blog posts from the database
     const blogPosts = await BlogPost.findAll();
@@ -15,7 +27,7 @@ router.get('/', async (req, res) => {
 });
 
 // Signup route
-router.post('/signup', async (req, res) => {
+app.post('/signup', async (req, res) => {
   try {
     const { username, password } = req.body;
     const user = await User.create({ username, password });
@@ -27,7 +39,7 @@ router.post('/signup', async (req, res) => {
 });
 
 // Login route
-router.post('/login', async (req, res) => {
+app.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
     const user = await User.findOne({ where: { username } });
@@ -43,13 +55,13 @@ router.post('/login', async (req, res) => {
 });
 
 // Logout route
-router.post('/logout', (req, res) => {
+app.post('/logout', (req, res) => {
   req.session.user = null;
   res.redirect('/');
 });
 
 // Blog post route
-router.get('/blog/:postId', async (req, res) => {
+app.get('/blog/:postId', async (req, res) => {
   try {
     const postId = req.params.postId;
     const blogPost = await BlogPost.findOne({ where: { id: postId } });
@@ -61,7 +73,7 @@ router.get('/blog/:postId', async (req, res) => {
 });
 
 // Add comment route
-router.post('/blog/:postId/comment', async (req, res) => {
+app.post('/blog/:postId/comment', async (req, res) => {
   try {
     const postId = req.params.postId;
     const { username, content } = req.body;
@@ -73,7 +85,7 @@ router.post('/blog/:postId/comment', async (req, res) => {
 });
 
 // Dashboard route
-router.get('/dashboard', async (req, res) => {
+app.get('/dashboard', async (req, res) => {
   try {
     const userId = req.session.user.id;
     const userBlogPosts = await BlogPost.findAll({ where: { userId } });
@@ -84,11 +96,11 @@ router.get('/dashboard', async (req, res) => {
 });
 
 // Create blog post route
-router.get('/dashboard/new', (req, res) => {
+app.get('/dashboard/new', (req, res) => {
   res.render('createBlogPost');
 });
 
-router.post('/dashboard/new', async (req, res) => {
+app.post('/dashboard/new', async (req, res) => {
   try {
     const { title, content } = req.body;
     const userId = req.session.user.id;
@@ -100,7 +112,7 @@ router.post('/dashboard/new', async (req, res) => {
 });
 
 // Update and delete blog post routes
-router.get('/dashboard/edit/:postId', async (req, res) => {
+app.get('/dashboard/edit/:postId', async (req, res) => {
   try {
     const postId = req.params.postId;
     const blogPost = await BlogPost.findOne({ where: { id: postId } });
@@ -110,7 +122,7 @@ router.get('/dashboard/edit/:postId', async (req, res) => {
   }
 });
 
-router.post('/dashboard/edit/:postId', async (req, res) => {
+app.post('/dashboard/edit/:postId', async (req, res) => {
   try {
     const postId = req.params.postId;
     const { title, content } = req.body;
@@ -121,7 +133,7 @@ router.post('/dashboard/edit/:postId', async (req, res) => {
   }
 });
 
-router.post('/dashboard/delete/:postId', async (req, res) => {
+app.post('/dashboard/delete/:postId', async (req, res) => {
   try {
     const postId = req.params.postId;
     await BlogPost.destroy({ where: { id: postId } });
@@ -131,5 +143,7 @@ router.post('/dashboard/delete/:postId', async (req, res) => {
   }
 });
 
-// Export the router
-module.exports = router;
+// Start the server
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});
