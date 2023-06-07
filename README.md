@@ -55,4 +55,8 @@ This is a CMS-style blog site that allows users to create an account, log in, an
 ![Dashboard](/path/to/dashboard.png)
 ![Blog Post](/path/to/blogpost.png)
 
+### Credit
+> Thanks to the TAs and tutors available to me, I was able to complete this project. 
+> While most of this is original, there is a lot that was assisted
+
 

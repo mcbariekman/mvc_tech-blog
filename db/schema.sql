@@ -36,3 +36,4 @@ CREATE TABLE comments (
 
 -- Add any additional tables or modifications as required for your project
 -- e.g., roles table for user roles, likes table for post likes, etc.
+
