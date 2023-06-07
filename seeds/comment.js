@@ -1,3 +1,5 @@
+//comment.js
+
 const { Comment } = require('../models');
 
 const commentData = [
