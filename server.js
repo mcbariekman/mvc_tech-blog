@@ -3,9 +3,9 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const helpers = require('./utils/helpers');
 const sequelize = require('./config/connection');
-
-const userController = require('./controllers/userController');
-// Import other controllers here if needed
+const postController = require('./controllers/postController');
+const authController = require('./controllers/authController');
+const homeControllerController = require('./controllers/homeController');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -21,8 +21,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(userController);
-// Add other controllers using app.use() here
+app.use(homeController);
+app.use(postController);
+app.use(authController);
 
 sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => console.log('Now listening'));
