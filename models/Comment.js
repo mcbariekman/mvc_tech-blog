@@ -3,7 +3,7 @@ const sequelize = require('../config/connection');
 
 class Comment extends Model {}
 
-Comment.init(
+const CommentModel = Comment.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -38,7 +38,7 @@ Comment.init(
     },
   },
   {
-    sequelize,
+    sequelize, // Reference to the existing Sequelize instance
     timestamps: false,
     freezeTableName: true,
     underscored: true,
@@ -46,4 +46,4 @@ Comment.init(
   }
 );
 
-module.exports = Comment;
+module.exports = CommentModel;

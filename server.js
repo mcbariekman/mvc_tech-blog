@@ -17,14 +17,23 @@ const hbs = exphbs.create({ helpers });
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
+// Add a console.log statement before and after each step
+
+console.log('Step 1: Before configuring middleware');
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+console.log('Step 2: After configuring middleware');
 
 app.use('/', homeController);
 app.use('/posts', postController);
 app.use('/auth', authController);
 
+console.log('Step 3: After mounting controllers');
+
 sequelize.sync({ force: false }).then(() => {
-  app.listen(PORT, () => console.log('Now listening'));
+  console.log('Step 4: Inside sequelize.sync');
+  app.listen(PORT, () => console.log('Now listening on port', PORT));
 });

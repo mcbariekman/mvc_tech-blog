@@ -1,14 +1,33 @@
-const User = require('./User');
-const Post = require('./Post');
+const { Sequelize } = require('sequelize');
+const sequelize = require('../config/connection');
 
+// Importing the models
+const User = require('./User')(sequelize);
+const Post = require('./Post')(sequelize);
+const Comment = require('./Comment')(sequelize);
+
+// Establishing associations
 User.hasMany(Post, {
-  foreignKey: 'user_id',
-  onDelete: 'CASCADE'
+  foreignKey: 'userId',
+  onDelete: 'CASCADE',
 });
 
-Project.belongsTo(User, {
-  foreignKey: 'user_id'
+Post.belongsTo(User, {
+  foreignKey: 'userId',
 });
 
-// Export the models
-module.exports = { User, Post };
+Post.hasMany(Comment, {
+  foreignKey: 'postId',
+  onDelete: 'CASCADE',
+});
+
+Comment.belongsTo(User, {
+  foreignKey: 'userId',
+});
+
+Comment.belongsTo(Post, {
+  foreignKey: 'postId',
+});
+
+// Exporting the models
+module.exports = { User, Post, Comment };

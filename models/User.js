@@ -1,20 +1,18 @@
-// Importing necessary modules
-const { Model, DataTypes } = require('sequelize'); // Importing required objects from Sequelize library
-const bcrypt = require('bcrypt'); // Importing bcrypt module for password hashing
-const sequelize = require('../config/connection'); // Importing Sequelize instance
+const { Model, DataTypes } = require('sequelize');
+const bcrypt = require('bcrypt');
+const sequelize = require('../config/connection');
 
-// Defining User model
 class User extends Model {
-  // Method to check if provided password matches the stored password
-  checkPassword(loginPw) {
-    return bcrypt.compareSync(loginPw, this.password);
+  static associate(models) {
+    // Define associations
+    User.hasMany(models.Comment, {
+      foreignKey: 'userId',
+    });
   }
 }
 
-// Initializing User model
-User.init(
+const UserModel = User.init(
   {
-    // Defining attributes of User model
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -42,20 +40,18 @@ User.init(
     },
   },
   {
-    // Defining options for User model
+    sequelize,
+    modelName: 'User',
+    timestamps: false,
+    freezeTableName: true,
+    underscored: true,
     hooks: {
-      // Hook executed before creating a new user to hash the password
       beforeCreate: async (newUserData) => {
         newUserData.password = await bcrypt.hash(newUserData.password, 10);
         return newUserData;
       },
     },
-    sequelize, // Specifying the Sequelize instance to use
-    timestamps: false, // Disabling createdAt and updatedAt columns
-    freezeTableName: true, // Ensuring the table name matches the model name
-    underscored: true, // Converting model names to snake case for table names
-    modelName: 'user', // Setting the model name to 'user'
   }
 );
 
-module.exports = User; // Exporting the User model
+module.exports = UserModel;
