@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const { User } = require('../models');
+const { User } = require('../../models');
 const { ensureGuest } = require('../middleware/auth');
+const passport = require('passport');
 
 // User registration
 router.post('/register', ensureGuest, async (req, res) => {
@@ -35,21 +36,8 @@ router.post('/register', ensureGuest, async (req, res) => {
 });
 
 // User login
-router.post('/login', ensureGuest, (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error authenticating user', error: err.message });
-    }
-    if (!user) {
-      return res.status(401).json({ message: 'Invalid username or password' });
-    }
-    req.login(user, (err) => {
-      if (err) {
-        return res.status(500).json({ message: 'Error logging in', error: err.message });
-      }
-      res.status(200).json({ message: 'Login successful', user: user });
-    });
-  })(req, res, next);
+router.post('/login', ensureGuest, passport.authenticate('local'), (req, res) => {
+  res.status(200).json({ message: 'Login successful', user: req.user });
 });
 
 // User logout
@@ -58,4 +46,12 @@ router.post('/logout', (req, res) => {
   res.status(200).json({ message: 'Logout successful' });
 });
 
+// Define the /users route
+router.get('/users', (req, res) => {
+  // Logic to retrieve all users from the database or any other data source
+  // Send the response with the users data
+  res.json({ users: [/* array of users */] });
+});
+
 module.exports = router;
+
