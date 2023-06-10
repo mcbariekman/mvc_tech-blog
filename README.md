@@ -1,6 +1,6 @@
 # CMS-Style Blog Site
 
-This is a CMS-style blog site that allows users to create an account, log in, and interact with blog posts by creating comments, adding, updating, and deleting posts.
+This is a CMS-style blog site that allows users to create an account, log in, and interact with blog posts by creating comments, adding, updating, and deleting posts. The code is still being debugged, but the app is deployed [here](https://deployed-techblog.herokuapp.com/) and still under construction. Once fully debugged, the app have the following: 
 
 ## Features
 
