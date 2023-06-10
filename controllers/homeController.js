@@ -1,4 +1,10 @@
 const { Post, User, Comment } = require('../models');
+const router = require('express').Router();
+
+router.get('/', async (req, res) => {
+  // Send the rendered Handlebars.js template back as the response
+  res.render('homepage');
+});
 
 const homeController = {
   // Handle GET request to the homepage
