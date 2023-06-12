@@ -1,13 +1,13 @@
 {
-  "dependencies": {
-    "bcrypt": "^5.1.0",
-    "connect-session-sequelize": "^7.1.7",
-    "dotenv": "^16.1.3",
-    "express": "^4.18.2",
-    "express-handlebars": "^7.0.7",
-    "express-session": "^1.17.3",
-    "handlebars": "^4.7.7",
-    "mysql2": "^3.3.3",
-    "sequelize": "^6.32.0"
-  }
+  "name": "mvc_tech-blog",
+  "version": "1.0.0",
+  "description": "This is a CMS-style blog site that allows users to create an account, log in, and interact with blog posts by creating comments, adding, updating, and deleting posts. The code is still being debugged, but the app is deployed [here](https://deployed-techblog.herokuapp.com/) and still under construction. Once fully debugged, the app have the following:",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
