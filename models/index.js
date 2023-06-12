@@ -31,3 +31,4 @@ Comment.belongsTo(Post, {
 
 // Exporting the models
 module.exports = { User, Post, Comment };
+
